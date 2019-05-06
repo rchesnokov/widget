@@ -1,0 +1,124 @@
+<template>
+  <button :class="buttonClass" @click="handleClick">
+    <span><slot></slot></span>
+    <Icon v-if="icon" :name="icon" :class="$style.icon"></Icon>
+  </button>
+</template>
+
+<script lang="ts">
+import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
+
+@Component
+export default class Button extends Vue {
+  @Prop(String) text!: string;
+  @Prop(String) icon!: string;
+  @Prop({ type: Boolean, default: true }) primary!: boolean;
+  @Prop(Boolean) secondary!: boolean;
+  @Prop(Boolean) plain!: boolean;
+  @Prop(Boolean) fullwidth!: boolean;
+  @Prop(Boolean) square!: boolean;
+
+  get buttonClass() {
+    return {
+      [this.$style.root]: true,
+      [this.$style.primary]: this.primary && !(this.secondary || this.plain),
+      [this.$style.secondary]: this.secondary,
+      [this.$style.plain]: this.plain,
+      [this.$style.fullwidth]: this.fullwidth,
+      [this.$style.square]: this.square,
+      [this.$style.withIcon]: this.icon,
+    };
+  }
+
+  @Emit('click')
+  handleClick(event: MouseEvent) {
+    return event;
+  }
+}
+</script>
+
+<style lang="scss" module>
+.root {
+  position: relative;
+  width: auto;
+  height: rem(42px);
+  padding: 10px 1rem 12px;
+  font-family: $font;
+  font-size: rem(13px);
+  line-height: 1.54;
+  text-align: center;
+  border: none;
+  border-radius: 3px;
+  transition: background-color 0.3s ease-out, border-color 0.3s ease-out,
+    color 0.3s ease-out;
+  cursor: pointer;
+
+  &.primary {
+    color: $white;
+    fill: $white;
+    background-color: $blue;
+
+    &:hover {
+      background-color: $dark-sky-blue;
+    }
+  }
+
+  &.secondary {
+    color: $black;
+    fill: $black;
+    background-color: $white;
+    box-shadow: 0 18px 18px 0 rgba(28, 32, 38, 0.05);
+
+    &:hover {
+      color: $blue;
+      fill: $blue;
+    }
+  }
+
+  &.plain {
+    color: $blue;
+    fill: $blue;
+    background-color: $pale-grey-two;
+    border: 1px solid $light-blue-grey;
+
+    &:hover {
+      background-color: $pale-grey-three;
+      border-color: $light-blue-grey-three;
+    }
+  }
+
+  &.fullwidth {
+    width: 100%;
+  }
+
+  &.square {
+    height: auto;
+    width: auto;
+    padding: 7px;
+
+    &.withIcon {
+      padding: rem(15px);
+
+      .icon {
+        top: 50%;
+        left: 50%;
+        font-size: rem(20px);
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  &.withIcon {
+    padding-left: rem(48px);
+    padding-right: rem(58px);
+  }
+}
+
+.icon {
+  position: absolute;
+  top: rem(10px);
+  right: rem(14px);
+  display: block;
+  font-size: rem(20px) !important;
+}
+</style>

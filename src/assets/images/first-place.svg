@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29">
+    <g fill="none" fill-rule="evenodd">
+        <path fill="#EFBF0B" d="M14.5 25.328l-4.48 2.962-1.884-5.03-5.367-.237 1.433-5.177L0 14.5l4.202-3.346L2.77 5.977l5.367-.237L10.019.71 14.5 3.672 18.98.71l1.884 5.03 5.367.237-1.433 5.177L29 14.5l-4.202 3.346 1.433 5.177-5.367.237-1.883 5.03z"/>
+        <text fill="#FFF" font-family="OpenSans-Regular, Open Sans" font-size="13">
+            <tspan x="11" y="18">1</tspan>
+        </text>
+    </g>
+</svg>

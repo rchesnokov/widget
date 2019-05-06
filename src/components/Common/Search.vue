@@ -1,0 +1,103 @@
+<template>
+  <div :class="$style.root">
+    <button :class="$style.button" @click="toggle">
+      <close v-if="isActive" :class="$style.icon"></close>
+      <loupe v-else :class="$style.icon"></loupe>
+    </button>
+
+    <transition name="slide-down" v-on:after-leave="clear">
+      <input
+        v-model="query"
+        v-show="isActive"
+        ref="input"
+        :class="$style.input"
+        type="text"
+        placeholder="Найти книгу"
+      />
+    </transition>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import close from '@/assets/images/arrow.svg';
+import loupe from '@/assets/images/loupe.svg';
+
+@Component({
+  components: {
+    close,
+    loupe,
+  },
+})
+export default class Search extends Vue {
+  isActive = false;
+  query = '';
+
+  clear() {
+    this.query = '';
+  }
+
+  toggle() {
+    this.isActive = !this.isActive;
+
+    if (!this.isActive) {
+      return;
+    }
+
+    this.$nextTick(() => {
+      (this.$refs.input as HTMLInputElement).focus();
+    });
+  }
+}
+</script>
+
+<style module lang="scss">
+.root {
+  display: flex;
+  justify-content: flex-end;
+  height: rem(42px);
+  border-radius: 3px;
+}
+
+.button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: rem(42px);
+  width: rem(42px);
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background: $white;
+  fill: $warm-grey;
+  transition: fill 0.2s ease-out;
+  cursor: pointer;
+
+  &:hover {
+    fill: $blue;
+  }
+}
+
+.icon {
+  display: block;
+  height: rem(20px);
+  width: rem(20px);
+}
+
+.input {
+  position: absolute;
+  right: rem(42px);
+  height: 100%;
+  width: calc(100% - 2.625rem);
+  padding: rem(10px) 16px rem(11px);
+  font-size: rem(13px);
+  line-height: 1.54;
+  border: none;
+  border-radius: 3px 0 0 3px;
+
+  &::placeholder {
+    color: $warm-grey;
+  }
+}
+</style>
