@@ -10,7 +10,7 @@
       </span>
     </div>
 
-    <transition name="slide-down">
+    <transition name="fade">
       <div v-show="isOpened" :class="$style.list">
         <div
           v-for="item in restItems"
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 import triangle from '@/assets/images/triangle.svg';
 
 interface SelectItem {
@@ -64,9 +64,11 @@ export default class Select extends Vue {
     this.isOpened = false;
   }
 
+  @Emit('select')
   select(event: Event) {
     const id = (event.target as HTMLElement).dataset.id;
     this.activeItemId = id || '';
+    return this.activeItemId;
   }
 
   toggle() {

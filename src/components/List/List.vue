@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Task } from '@/modules/task/TaskModels';
+import { Task } from '@/modules/task/models/task';
 import ListColumn from '@/components/List/ListColumn.vue';
 import arrow from '@/assets/images/arrow.svg';
 
@@ -40,6 +40,7 @@ export default class List extends Vue {
   swiperOptions = {
     slidesPerView: 'auto',
     spaceBetween: 65,
+    initialSlide: 1,
     centeredSlides: true,
     watchOverflow: true,
     navigation: {
@@ -49,12 +50,10 @@ export default class List extends Vue {
     breakpoints: {
       1460: {
         slidesPerView: 'auto',
-        initialSlide: 1,
-        centeredSlides: true,
+        initialSlide: 0,
       },
       320: {
         slidesPerView: 1,
-        centeredSlides: true,
         spaceBetween: 10,
       },
     },
@@ -82,6 +81,10 @@ export default class List extends Vue {
     width: 20%;
     pointer-events: none;
 
+    @media #{$desktop} {
+      width: 10%;
+    }
+
     @media #{$tablet} {
       width: 20px;
     }
@@ -106,11 +109,24 @@ export default class List extends Vue {
   }
 }
 
-:global(.swiper-slide) {
+.slide {
+  position: relative;
   width: auto !important;
 
   @media #{$tablet} {
     width: 100% !important;
+
+    &:global(.swiper-slide-active) {
+      z-index: 1;
+    }
+
+    &:global(.swiper-slide-prev) {
+      right: calc(-40% - 60px);
+    }
+
+    &:global(.swiper-slide-next) {
+      left: calc(-40% - 60px);
+    }
   }
 }
 

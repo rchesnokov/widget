@@ -1,5 +1,10 @@
 <template>
-  <button :class="buttonClass" @click="handleClick">
+  <a v-if="link" :href="link" :class="buttonClass" @click="handleClick">
+    <span><slot></slot></span>
+    <Icon v-if="icon" :name="icon" :class="$style.icon"></Icon>
+  </a>
+
+  <button v-else :class="buttonClass" @click="handleClick">
     <span><slot></slot></span>
     <Icon v-if="icon" :name="icon" :class="$style.icon"></Icon>
   </button>
@@ -10,9 +15,10 @@ import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Button extends Vue {
+  @Prop(String) link!: string;
   @Prop(String) text!: string;
   @Prop(String) icon!: string;
-  @Prop({ type: Boolean, default: true }) primary!: boolean;
+  @Prop({ default: true }) primary!: boolean;
   @Prop(Boolean) secondary!: boolean;
   @Prop(Boolean) plain!: boolean;
   @Prop(Boolean) fullwidth!: boolean;
@@ -40,12 +46,14 @@ export default class Button extends Vue {
 <style lang="scss" module>
 .root {
   position: relative;
+  display: block;
   width: auto;
   height: rem(42px);
   padding: 10px 1rem 12px;
   font-family: $font;
   font-size: rem(13px);
   line-height: 1.54;
+  text-decoration: none;
   text-align: center;
   border: none;
   border-radius: 3px;

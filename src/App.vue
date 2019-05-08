@@ -1,12 +1,20 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/ui">UI Kit</router-link>
-    </div>
-    <router-view />
+    <Main></Main>
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import Main from '@/views/Main.vue';
+
+@Component({
+  components: {
+    Main,
+  },
+})
+export default class App extends Vue {}
+</script>
 
 <style lang="scss">
 html,
@@ -30,27 +38,26 @@ body {
   }
 }
 
-#nav {
-  padding: 30px;
-  text-align: center;
+/* Animations */
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .slide-down-enter-active,
 .slide-down-leave-active {
-  transition: opacity 0.4s;
+  transition: opacity 0.4s, max-height 0.3s;
 }
 
 .slide-down-enter,
 .slide-down-leave-to {
   opacity: 0;
+  max-height: 0;
 }
 </style>

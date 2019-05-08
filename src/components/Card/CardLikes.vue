@@ -1,7 +1,11 @@
 <template>
   <div :class="$style.root">
-    <span :class="$style.button">
-      <Button square plain icon="heart"></Button>
+    <span
+      :class="$style.button"
+      @mouseleave="handleBlur"
+      @mouseenter="handleHover"
+    >
+      <Button square plain :icon="buttonIcon"></Button>
     </span>
     <span :class="$style.counter">{{ likes | roundup }}</span>
   </div>
@@ -11,10 +15,24 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class Card extends Vue {
+export default class CardLikes extends Vue {
   @Prop(Number) likes!: number;
   @Prop(Number) dislikes!: number;
   @Prop({ default: false }) isDislikesShown!: boolean;
+
+  isButtonHovered = false;
+
+  get buttonIcon() {
+    return this.isButtonHovered ? 'loupe' : 'heart';
+  }
+
+  handleBlur() {
+    this.isButtonHovered = false;
+  }
+
+  handleHover() {
+    this.isButtonHovered = true;
+  }
 }
 </script>
 

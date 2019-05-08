@@ -784,6 +784,11 @@
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.14.tgz#37daaf78069e7948520474c87b80092ea912520a"
   integrity sha512-Q5hTcfdudEL2yOmluA1zaSyPbzWPmJ3XfSWeP3RyoYvS9hnje1ZyagrZOuQ6+1nQC1Gw+7gap3pLNL3xL6UBug==
 
+"@types/lodash@^4.14.124":
+  version "4.14.124"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.124.tgz#16fb067a8fc4be42f044c505d8b5316c6f54de93"
+  integrity sha512-6bKEUVbHJ8z34jisA7lseJZD2g31SIvee3cGX2KEZCS4XXWNbjPZpmO1/2rGNR9BhGtaYr6iYXPl1EzRrDAFTA==
+
 "@types/minimatch@*":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
@@ -9485,6 +9490,11 @@ vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
+
+vuex-class@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/vuex-class/-/vuex-class-0.3.2.tgz#c7e96a076c1682137d4d23a8dcfdc63f220e17a8"
+  integrity sha512-m0w7/FMsNcwJgunJeM+wcNaHzK2KX1K1rw2WUQf7Q16ndXHo7pflRyOV/E8795JO/7fstyjH3EgqBI4h4n4qXQ==
 
 vuex-module-decorators@^0.9.8:
   version "0.9.8"

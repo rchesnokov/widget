@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --target lib --name book-widget ./src/main.ts",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
+    "lodash": "^4.17.11",
     "ramda": "^0.26.1",
     "sass-rem": "^2.0.1",
     "v-click-outside": "^2.1.1",
@@ -22,10 +23,12 @@
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1",
+    "vuex-class": "^0.3.2",
     "vuex-module-decorators": "^0.9.8"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
+    "@types/lodash": "^4.14.124",
     "@types/ramda": "^0.26.8",
     "@vue/cli-plugin-babel": "^3.6.0",
     "@vue/cli-plugin-e2e-cypress": "^3.6.0",

@@ -1,13 +1,20 @@
 <template>
   <div :class="$style.root">
-    <Select :class="$style.select" :list="filters" active="date" />
-    <Search :class="$style.search" />
+    <Select
+      :class="$style.select"
+      :list="filters"
+      active="rating"
+      @select="handleSortSelect"
+    />
+
+    <Search :class="$style.search" @change="handleSearchChange" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Emit, Vue } from 'vue-property-decorator';
 
+@Component
 export default class ListFilter extends Vue {
   filters = [
     {
@@ -23,6 +30,16 @@ export default class ListFilter extends Vue {
       label: 'По алфавиту',
     },
   ];
+
+  @Emit('sort-change')
+  handleSortSelect(id: string) {
+    return id;
+  }
+
+  @Emit('search-change')
+  handleSearchChange(query: string) {
+    return query;
+  }
 }
 </script>
 

@@ -5,7 +5,7 @@
       <loupe v-else :class="$style.icon"></loupe>
     </button>
 
-    <transition name="slide-down" v-on:after-leave="clear">
+    <transition name="fade" v-on:after-leave="clear">
       <input
         v-model="query"
         v-show="isActive"
@@ -13,13 +13,15 @@
         :class="$style.input"
         type="text"
         placeholder="Найти книгу"
+        @input="handleChange"
       />
     </transition>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Emit, Vue } from 'vue-property-decorator';
+import _debounce from 'lodash/debounce';
 import close from '@/assets/images/arrow.svg';
 import loupe from '@/assets/images/loupe.svg';
 
@@ -35,6 +37,7 @@ export default class Search extends Vue {
 
   clear() {
     this.query = '';
+    this.handleChange();
   }
 
   toggle() {
@@ -47,6 +50,15 @@ export default class Search extends Vue {
     this.$nextTick(() => {
       (this.$refs.input as HTMLInputElement).focus();
     });
+  }
+
+  @Emit('change')
+  handleChange() {
+    return this.query;
+  }
+
+  created() {
+    this.handleChange = _debounce(this.handleChange, 500);
   }
 }
 </script>
@@ -90,7 +102,7 @@ export default class Search extends Vue {
   right: rem(42px);
   height: 100%;
   width: calc(100% - 2.625rem);
-  padding: rem(10px) 16px rem(11px);
+  padding: rem(10px) 16px rem(12px);
   font-size: rem(13px);
   line-height: 1.54;
   border: none;

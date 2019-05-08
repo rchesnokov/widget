@@ -17,18 +17,25 @@
             :likes="solution.metrics.positive_votes"
             :dislikes="solution.metrics.negative_votes"
           />
-          <CLink @click="handleDetailsClick">Подробнее</CLink>
+          <Toggle @click="handleDetailsClick">Подробнее</Toggle>
         </div>
       </div>
     </div>
 
     <transition name="slide-down">
       <div v-show="isExpanded" :class="$style.additional">
+        <hr />
         <p :class="$style.description" v-html="solution.content"></p>
         <p :class="$style.descriptionButtonMore">
           <CLink @click="handleDetailsClick">Читать все</CLink>
         </p>
-        <Button :class="$style.fragmentButton" plain fullwidth icon="loupe">
+        <Button
+          :class="$style.fragmentButton"
+          :link="'#'"
+          plain
+          fullwidth
+          icon="loupe"
+        >
           Читать отрывок
         </Button>
         <footer :class="$style.footer">
@@ -44,7 +51,7 @@
 import * as R from 'ramda';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import CardLikes from './CardLikes.vue';
-import { Solution } from '@/modules/task/TaskModels';
+import { Solution } from '@/modules/task/models/solution';
 
 @Component({
   components: {
@@ -129,12 +136,24 @@ export default class Card extends Vue {
 
 .additional {
   overflow: hidden;
-  margin-top: 20px;
-  padding-top: 12px;
-  border-top: 1px solid $light-grey;
+  max-height: 500px;
+
+  &:global(.slide-down-enter),
+  &:global(.slide-down-leave-to) {
+    max-height: 0;
+  }
+
+  hr {
+    margin: 20px 0 12px;
+    height: 1px;
+    background-color: $light-grey;
+    border: none;
+  }
 }
 
 .description {
+  overflow: hidden;
+  max-height: rem(100px);
   margin: 0 auto;
   font-size: 13px;
   line-height: 1.54;
