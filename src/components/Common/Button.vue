@@ -1,12 +1,20 @@
 <template>
   <a v-if="link" :href="link" :class="buttonClass" @click="handleClick">
     <span><slot></slot></span>
-    <Icon v-if="icon" :name="icon" :class="$style.icon"></Icon>
+    <Icon
+      v-if="icon"
+      :name="icon"
+      :class="[$style.icon, $style[`icon_${icon}`]]"
+    ></Icon>
   </a>
 
   <button v-else :class="buttonClass" @click="handleClick">
     <span><slot></slot></span>
-    <Icon v-if="icon" :name="icon" :class="$style.icon"></Icon>
+    <Icon
+      v-if="icon"
+      :name="icon"
+      :class="[$style.icon, $style[`icon_${icon}`]]"
+    ></Icon>
   </button>
 </template>
 
@@ -110,7 +118,6 @@ export default class Button extends Vue {
       .icon {
         top: 50%;
         left: 50%;
-        font-size: rem(20px);
         transform: translate(-50%, -50%);
       }
     }
@@ -124,9 +131,23 @@ export default class Button extends Vue {
 
 .icon {
   position: absolute;
-  top: rem(10px);
+  top: 50%;
   right: rem(14px);
   display: block;
-  font-size: rem(20px) !important;
+  font-size: rem(20px);
+  fill: $warm-grey;
+  transform: translate(0, -50%);
+
+  &.icon_heart {
+    font-size: rem(14px);
+  }
+
+  &.icon_heartHover {
+    font-size: rem(14px);
+  }
+
+  &.icon_paperclip {
+    font-size: rem(14px);
+  }
 }
 </style>

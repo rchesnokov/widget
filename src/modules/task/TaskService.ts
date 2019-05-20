@@ -8,7 +8,7 @@ import {
 import { Task, TaskResponse } from '@/modules/task/models/task';
 import { AxiosResponse } from 'axios';
 
-type Sorting = 'vote_total' | 'name' | 'date';
+type Sorting = 'vote_total' | 'created' | '';
 
 interface IFetchSolutionsParams {
   taskId: number;
@@ -19,19 +19,19 @@ interface IFetchSolutionsParams {
 }
 
 class TaskService {
-  async fetchTask(taskId: number): Promise<Task> {
+  static async fetchTask(taskId: number): Promise<Task> {
     const response: AxiosResponse = await api.get(`/api/tasks/${taskId}`);
     const data: TaskResponse = response.data;
     return data.data;
   }
 
-  async fetchTaskMeta(taskId: number): Promise<Meta> {
+  static async fetchTaskMeta(taskId: number): Promise<Meta> {
     const response: AxiosResponse = await api.get(`/api/tasks/${taskId}/meta`);
     const data: MetaResponse = response.data;
     return data.data;
   }
 
-  async fetchTaskSolutions(
+  static async fetchTaskSolutions(
     params: IFetchSolutionsParams
   ): Promise<SolutionArray> {
     const { taskId, query, page, pageSize, sort } = params;
@@ -60,6 +60,23 @@ class TaskService {
 
     return solutions;
   }
+
+  static async voteForSolution(solutionId: number, vote: number) {
+    const data = new FormData();
+    data.set('value', String(vote));
+
+    const response = await api.request({
+      url: `/api/solutions/${solutionId}/vote`,
+      method: 'post',
+      data,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+
+    return null;
+  }
 }
 
-export default new TaskService();
+export default TaskService;

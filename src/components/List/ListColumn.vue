@@ -13,6 +13,10 @@
       :class="$style.item"
       :key="item.id"
       :solution="item"
+      :task="task"
+      :vote="isVotedFor(item.id)"
+      :votesRemaining="remainingVotes(task.id)"
+      @like="handleLikeClick"
     />
 
     <div v-if="!isFetching(task.id) && !hasSolutions" :class="$style.empty">
@@ -41,7 +45,8 @@ import { Getter } from 'vuex-class';
 import TaskModule from '@/modules/task/TaskModule';
 import Card from '@/components/Card/Card.vue';
 import ListFilter from '@/components/List/ListFilter.vue';
-import { SolutionArray } from '@/modules/task/models/solution';
+import { Meta } from '@/modules/task/models/meta';
+import { Solution, SolutionArray } from '@/modules/task/models/solution';
 import { Task } from '@/modules/task/models/task';
 
 type Sorting = 'rating' | 'name' | 'date';
@@ -64,6 +69,15 @@ export default class ListColumn extends Vue {
 
   @Getter('getIsFetchingSolutions') isFetching!: (taskId: number) => boolean;
   @Getter('getSolutions') solutions!: (taskId: number) => SolutionArray;
+  @Getter('getTaskMeta') meta!: (taskId: number) => Meta;
+  @Getter('getRemainingVotes') remainingVotes!: (taskId: number) => number;
+
+  get isVotedFor() {
+    return (solutionId: number): boolean => {
+      const meta = this.meta(this.task.id);
+      return Boolean(meta.user.solution_votes[solutionId]) || false;
+    };
+  }
 
   get hasSolutions() {
     const solutions = this.solutions(this.task.id);
@@ -72,12 +86,15 @@ export default class ListColumn extends Vue {
 
   get hasMoreSolutionsToLoad() {
     const solutions = this.solutions(this.task.id);
-
     if (!solutions) {
       return false;
     }
 
     return solutions.length < solutions.count!;
+  }
+
+  handleLikeClick({ task, solution }: { task: Task; solution: Solution }) {
+    this.taskModule.likeSolution({ task, solution });
   }
 
   handleMoreClick() {

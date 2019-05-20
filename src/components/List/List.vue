@@ -40,17 +40,17 @@ export default class List extends Vue {
   swiperOptions = {
     slidesPerView: 'auto',
     spaceBetween: 65,
-    initialSlide: 1,
-    centeredSlides: true,
+    centerInsufficientSlides: true,
     watchOverflow: true,
     navigation: {
       nextEl: '.button-next',
       prevEl: '.button-prev',
     },
     breakpoints: {
-      1460: {
+      1280: {
         slidesPerView: 'auto',
-        initialSlide: 0,
+        centeredSlides: true,
+        centerInsufficientSlides: false,
       },
       320: {
         slidesPerView: 1,

@@ -1,8 +1,7 @@
 <template>
   <div :class="$style.root">
     <button :class="$style.button" @click="toggle">
-      <close v-if="isActive" :class="$style.icon"></close>
-      <loupe v-else :class="$style.icon"></loupe>
+      <Icon :class="$style.icon" :name="buttonIcon"></Icon>
     </button>
 
     <transition name="fade" v-on:after-leave="clear">
@@ -22,18 +21,15 @@
 <script lang="ts">
 import { Component, Emit, Vue } from 'vue-property-decorator';
 import _debounce from 'lodash/debounce';
-import close from '@/assets/images/arrow.svg';
-import loupe from '@/assets/images/loupe.svg';
 
-@Component({
-  components: {
-    close,
-    loupe,
-  },
-})
+@Component
 export default class Search extends Vue {
   isActive = false;
   query = '';
+
+  get buttonIcon() {
+    return this.isActive ? 'close' : 'loupe';
+  }
 
   clear() {
     this.query = '';
@@ -93,8 +89,8 @@ export default class Search extends Vue {
 
 .icon {
   display: block;
-  height: rem(20px);
-  width: rem(20px);
+  font-size: rem(20px);
+  fill: $warm-grey;
 }
 
 .input {

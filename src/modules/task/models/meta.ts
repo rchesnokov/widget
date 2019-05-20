@@ -25,7 +25,9 @@ export interface Task {
 
 export interface CommentVotes {}
 
-export interface SolutionVotes {}
+export interface SolutionVotes {
+  [key: number]: number;
+}
 
 export interface User {
   favorites: any[];

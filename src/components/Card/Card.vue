@@ -8,14 +8,17 @@
         }"
       ></div>
       <div :class="$style.content">
-        <div :class="$style.top">
+        <a :class="$style.top" :href="link">
           <div :class="$style.author">Мартин Риз, Кнут Харрис, Дж…</div>
           <div :class="$style.name">{{ solution.title }}</div>
-        </div>
+        </a>
         <div :class="$style.bottom">
           <CardLikes
             :likes="solution.metrics.positive_votes"
             :dislikes="solution.metrics.negative_votes"
+            :vote="vote"
+            :votesRemaining="votesRemaining"
+            @like="handleLikeClick"
           />
           <Toggle @click="handleDetailsClick">Подробнее</Toggle>
         </div>
@@ -25,22 +28,46 @@
     <transition name="slide-down">
       <div v-show="isExpanded" :class="$style.additional">
         <hr />
-        <p :class="$style.description" v-html="solution.content"></p>
-        <p :class="$style.descriptionButtonMore">
-          <CLink @click="handleDetailsClick">Читать все</CLink>
-        </p>
+
+        <transition name="slide-down-in" mode="out-in">
+          <div
+            v-if="isDescriptionTrimmed && !isDescriptionExpanded"
+            key="trimmed"
+          >
+            <p :class="$style.description" v-html="trimmedContent"></p>
+            <p :class="$style.descriptionButtonMore">
+              <CLink @click="handleReadAllClick">Читать все</CLink>
+            </p>
+          </div>
+
+          <div v-else key="full">
+            <p :class="$style.description" v-html="solution.content"></p>
+          </div>
+        </transition>
+
         <Button
+          v-if="preview"
           :class="$style.fragmentButton"
-          :link="'#'"
+          :link="preview"
           plain
           fullwidth
-          icon="loupe"
+          icon="paperclip"
         >
           Читать отрывок
         </Button>
+
         <footer :class="$style.footer">
-          <CLink>{{ solution.author.username }}</CLink>
-          <span> • {{ solution.created | date }}</span>
+          <span>
+            <a :href="`/user/${solution.author.id}`" :class="$style.author">
+              <CLink>{{ solution.author.username }}</CLink>
+            </a>
+            <span> • {{ solution.created | date }}</span>
+          </span>
+
+          <span :class="$style.actions">
+            <Icon name="share" />
+            <Icon name="star" />
+          </span>
         </footer>
       </div>
     </transition>
@@ -49,9 +76,10 @@
 
 <script lang="ts">
 import * as R from 'ramda';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 import CardLikes from './CardLikes.vue';
 import { Solution } from '@/modules/task/models/solution';
+import { Task } from '@/modules/task/models/task';
 
 @Component({
   components: {
@@ -60,15 +88,46 @@ import { Solution } from '@/modules/task/models/solution';
 })
 export default class Card extends Vue {
   @Prop() solution!: Solution;
+  @Prop() task!: Task;
+  @Prop() vote!: boolean;
+  @Prop() votesRemaining!: number;
 
   isExpanded = false;
+  isDescriptionExpanded = false;
+
+  get isDescriptionTrimmed() {
+    return this.solution.content && this.solution.content.length > 180;
+  }
+
+  get link() {
+    return `/project/${this.task.project.path}/task/${this.task.id}/solution/${
+      this.solution.id
+    }`;
+  }
+
+  get preview() {
+    return R.path(['attachments', 1, 'url'], this.solution) || '';
+  }
 
   get thumbnail() {
-    return R.path(['attachments', 0, 'thumbs', 560], this.solution);
+    return R.path(['attachments', 0, 'thumbs', 560], this.solution) || '';
+  }
+
+  get trimmedContent() {
+    return this.solution.content && `${this.solution.content.slice(0, 180)}...`;
   }
 
   handleDetailsClick(event: MouseEvent) {
     this.isExpanded = !this.isExpanded;
+  }
+
+  @Emit('like')
+  handleLikeClick() {
+    return { task: this.task, solution: this.solution };
+  }
+
+  handleReadAllClick() {
+    this.isDescriptionExpanded = true;
   }
 }
 </script>
@@ -107,11 +166,8 @@ export default class Card extends Vue {
 
 .top {
   margin-bottom: rem(20px);
+  text-decoration: none;
   cursor: pointer;
-
-  &:hover {
-    color: $blue;
-  }
 }
 
 .author {
@@ -124,7 +180,12 @@ export default class Card extends Vue {
 .name {
   font-weight: 600;
   line-height: 1.32;
+  color: $black;
   transition: color 0.2s ease-out;
+
+  .top:hover & {
+    color: $blue;
+  }
 }
 
 .bottom {
@@ -153,7 +214,6 @@ export default class Card extends Vue {
 
 .description {
   overflow: hidden;
-  max-height: rem(100px);
   margin: 0 auto;
   font-size: 13px;
   line-height: 1.54;
@@ -170,9 +230,36 @@ export default class Card extends Vue {
 }
 
 .footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 2rem;
   font-size: 13px;
   line-height: 1.54;
   color: $warm-grey;
+}
+
+.author {
+  text-decoration: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > span {
+    fill: $light-grey;
+    transition: fill 0.2s ease-out;
+    cursor: pointer;
+
+    &:hover {
+      fill: $blue;
+    }
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
 }
 </style>

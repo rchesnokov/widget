@@ -1,7 +1,9 @@
 <template>
   <div :class="$style.root">
     <span
+      v-tooltip.auto="{ content: tooltipContent, trigger: 'hover' }"
       :class="$style.button"
+      @click="handleClick"
       @mouseleave="handleBlur"
       @mouseenter="handleHover"
     >
@@ -12,18 +14,59 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
+import * as utils from '@/utils';
 
 @Component
 export default class CardLikes extends Vue {
   @Prop(Number) likes!: number;
   @Prop(Number) dislikes!: number;
   @Prop({ default: false }) isDislikesShown!: boolean;
+  @Prop({ default: false }) vote!: boolean;
+  @Prop({ default: null }) votesRemaining!: number;
 
   isButtonHovered = false;
 
   get buttonIcon() {
-    return this.isButtonHovered ? 'loupe' : 'heart';
+    return this.vote
+      ? 'heartFilled'
+      : this.votesRemaining <= 0
+      ? 'heartDisabled'
+      : this.isButtonHovered
+      ? 'heartHover'
+      : 'heart';
+  }
+
+  get tooltipContent() {
+    if (this.vote) {
+      return 'Отменить голос';
+    }
+
+    const remains = utils.declension(this.votesRemaining, {
+      one: 'Остался',
+      few: 'Осталось',
+      many: 'Осталось',
+    });
+
+    const votes = utils.declension(this.votesRemaining, {
+      one: 'голос',
+      few: 'голоса',
+      many: 'голосов',
+    });
+
+    return this.votesRemaining < 0
+      ? 'Голосование недоступно'
+      : this.votesRemaining === 0
+      ? 'У вас не осталось голосов'
+      : `${remains} ${this.votesRemaining} ${votes}`;
+  }
+
+  handleClick() {
+    if (this.votesRemaining <= 0 && !this.vote) {
+      return;
+    }
+
+    this.$emit('like');
   }
 
   handleBlur() {
@@ -44,6 +87,7 @@ export default class CardLikes extends Vue {
 }
 
 .button {
+  position: relative;
 }
 
 .counter {

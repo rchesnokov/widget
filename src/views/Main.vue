@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import * as R from 'ramda';
 import { Component, Vue } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 import TaskModule from '@/modules/task/TaskModule';
@@ -21,11 +22,17 @@ export default class Main extends Vue {
 
   @Getter('getTasks') tasks!: Task[];
 
-  created() {
+  async created() {
+    if (!this.$auth.getToken()) {
+      await this.$auth.createToken();
+    }
+
     this.taskModule.fetchTasks();
     this.taskModule.fetchTasksMeta();
-    this.taskModule.fetchTaskSolutions({ taskId: 9303 });
-    this.taskModule.fetchTaskSolutions({ taskId: 9304 });
+    R.forEach(
+      (task) => this.taskModule.fetchTaskSolutions({ taskId: task }),
+      this.taskModule.requested
+    );
   }
 }
 </script>

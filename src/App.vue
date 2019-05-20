@@ -17,13 +17,6 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 #app {
   min-height: 100%;
   font-family: $font;
@@ -35,6 +28,33 @@ body {
   * {
     box-sizing: border-box;
     outline: none;
+  }
+}
+
+/* Tooltip */
+.tooltip {
+  z-index: 9999;
+
+  &-inner {
+    padding: 6px 16px;
+    margin-bottom: 8px;
+    font-size: rem(13px);
+    line-height: 1.38;
+    border-radius: 5px;
+    background-color: $blue;
+    color: $white;
+  }
+
+  &-arrow {
+    position: absolute;
+    top: calc(100% - 8px);
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 4px 4px 0 4px;
+    border-color: $blue transparent transparent transparent;
+    transform: rotateX(-50%);
   }
 }
 
@@ -59,5 +79,18 @@ body {
 .slide-down-leave-to {
   opacity: 0;
   max-height: 0;
+}
+
+.slide-down-in-enter-active {
+  transition: opacity 0.4s;
+}
+
+.slide-down-in-leave-active {
+  transition: none;
+}
+
+.slide-down-in-enter,
+.slide-down-in-leave-to {
+  opacity: 0;
 }
 </style>

@@ -29,7 +29,8 @@ export interface Author {
 export interface Metrics {
   positive_votes: number;
   negative_votes: number;
-  comments_count: number;
+  comments_count?: number;
+  my_vote?: number;
 }
 
 export interface Status {
@@ -38,10 +39,20 @@ export interface Status {
   label_id: string;
 }
 
+export interface Field {
+  header: string;
+  type: string;
+  value: string;
+}
+
+export interface JSONContent {
+  fields: Field[];
+}
+
 export interface Solution {
   id: number;
   title: string;
-  content: string;
+  content?: string;
   pinned: boolean;
   cut: boolean;
   attachments: Attachment[];
@@ -55,7 +66,7 @@ export interface Solution {
   statuses: Status[];
   prizes: any[];
   shared_url: any[];
-  json_content?: any;
+  json_content?: JSONContent;
   moderated: number;
 }
 

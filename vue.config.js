@@ -12,6 +12,16 @@ module.exports = {
       addStyleResource(config.module.rule('scss').oneOf(type))
     );
   },
+
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://crowdback.local',
+        ws: true,
+        changeOrigin: true
+      },
+    }
+  }
 };
 
 function addStyleResource(rule) {
