@@ -14,8 +14,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as utils from '@/utils';
+import { Getter } from 'vuex-class';
+import { User } from '@/modules/task/models/meta';
 
 @Component
 export default class CardLikes extends Vue {
@@ -25,9 +27,15 @@ export default class CardLikes extends Vue {
   @Prop({ default: false }) vote!: boolean;
   @Prop({ default: null }) votesRemaining!: number;
 
+  @Getter('user/getUser') user!: User;
+
   isButtonHovered = false;
 
   get buttonIcon() {
+    if (!this.user) {
+      return this.isButtonHovered ? 'heartHover' : 'heart';
+    }
+
     return this.vote
       ? 'heartFilled'
       : this.votesRemaining <= 0
@@ -38,6 +46,10 @@ export default class CardLikes extends Vue {
   }
 
   get tooltipContent() {
+    if (!this.user) {
+      return '';
+    }
+
     if (this.vote) {
       return 'Отменить голос';
     }
@@ -62,10 +74,6 @@ export default class CardLikes extends Vue {
   }
 
   handleClick() {
-    if (this.votesRemaining <= 0 && !this.vote) {
-      return;
-    }
-
     this.$emit('like');
   }
 

@@ -14,4 +14,4 @@ registerGlobalComponents();
 new Vue({
   store,
   render: (h) => h(App),
-}).$mount('#app');
+}).$mount('#book-widget-root');

@@ -1,5 +1,6 @@
 import api from '@/api';
 import * as R from 'ramda';
+import Cookies from 'universal-cookie/es6';
 import { Meta, MetaResponse } from '@/modules/task/models/meta';
 import {
   SolutionResponse,
@@ -64,6 +65,7 @@ class TaskService {
   static async voteForSolution(solutionId: number, vote: number) {
     const data = new FormData();
     data.set('value', String(vote));
+    data.set('Csrf-Token', new Cookies().get('Csrf-Token'));
 
     const response = await api.request({
       url: `/api/solutions/${solutionId}/vote`,

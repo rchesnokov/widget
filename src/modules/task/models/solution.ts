@@ -66,7 +66,7 @@ export interface Solution {
   statuses: Status[];
   prizes: any[];
   shared_url: any[];
-  json_content?: JSONContent;
+  json_content: JSONContent;
   moderated: number;
 }
 

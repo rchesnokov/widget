@@ -22,14 +22,21 @@ const alertServiceMock = {
 
 const verificationServiceMock = {
   // tslint:disable-next-line:no-empty
-  requestVerification: () => {},
+  requestVerification: (
+    isNotPhoneVerified: boolean,
+    isNotSNVerified: boolean,
+    like: string,
+    solutionLiteral: string
+  ) => {},
 };
 
 @Module({ dynamic: true, name: 'user', namespaced: true, store })
 export class UserModule extends VuexModule {
-  authService = window.authService || authServiceMock;
-  alertService = window.alertsActions || alertServiceMock;
-  verificationService = window.verificationService || verificationServiceMock;
+  static authService = window.authService || authServiceMock;
+  static alertService = window.alertsActions || alertServiceMock;
+  static verificationService =
+    window.verificationService || verificationServiceMock;
+
   user = window.store && window.store.getState().user;
 
   get getUser() {
@@ -42,7 +49,7 @@ export class UserModule extends VuexModule {
     isNotSNVerified: boolean,
     solutionLiteral: string
   ) {
-    return this.verificationService.requestVerification(
+    return UserModule.verificationService.requestVerification(
       isNotPhoneVerified,
       isNotSNVerified,
       'like',
@@ -52,7 +59,7 @@ export class UserModule extends VuexModule {
 
   @Action
   showConfirmation() {
-    this.alertService.error(
+    UserModule.alertService.error(
       `Для оценки книг вам необходимо подтвердить регистрацию.
        Письмо со ссылкой для подтверждения регистрации отправлено на ваш адрес.`
     );
@@ -60,7 +67,7 @@ export class UserModule extends VuexModule {
 
   @Action
   showRegistration() {
-    this.authService.showRegistrationPopup();
+    UserModule.authService.showRegistrationPopup();
   }
 }
 

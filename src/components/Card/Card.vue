@@ -9,8 +9,8 @@
       ></div>
       <div :class="$style.content">
         <a :class="$style.top" :href="link">
-          <div :class="$style.author">Мартин Риз, Кнут Харрис, Дж…</div>
-          <div :class="$style.name">{{ solution.title }}</div>
+          <div :class="$style.author">{{ content.author }}</div>
+          <div :class="$style.name">{{ content.title || solution.title }}</div>
         </a>
         <div :class="$style.bottom">
           <CardLikes
@@ -41,7 +41,10 @@
           </div>
 
           <div v-else key="full">
-            <p :class="$style.description" v-html="solution.content"></p>
+            <p
+              :class="$style.description"
+              v-html="content.description || solution.content"
+            ></p>
           </div>
         </transition>
 
@@ -95,8 +98,26 @@ export default class Card extends Vue {
   isExpanded = false;
   isDescriptionExpanded = false;
 
+  get content() {
+    const fields = R.pathOr({}, ['fields'], this.solution.json_content);
+    const getFieldValue = (path: string): string => {
+      return R.pipe(
+        R.find(R.propEq('header', path)),
+        R.path(['value'])
+      )(fields) as string;
+    };
+
+    return {
+      author: getFieldValue('Автор'),
+      description: getFieldValue('Описание'),
+      publisher: getFieldValue('Издательство'),
+      title: getFieldValue('Название'),
+    };
+  }
+
   get isDescriptionTrimmed() {
-    return this.solution.content && this.solution.content.length > 180;
+    const content = this.content.description || this.solution.content;
+    return content && content.length! > 180;
   }
 
   get link() {

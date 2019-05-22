@@ -60,15 +60,15 @@ const metricsServiceMock = {
 
 @Module({ dynamic: true, name: 'task', store })
 export class TaskModule extends VuexModule {
+  static metricsService = window.metricsService || metricsServiceMock;
+  static userModule = UserModule;
+
   fetchingTasks = false;
   fetchingSolutions: IFetchingSolutionMap = {};
   requested = tasksRequested;
   solutions: ISolutionMap = {};
   tasks: Task[] = [];
   tasksMeta: IMetaMap = {};
-
-  metricsService = window.metricsService || metricsServiceMock;
-  userModule = UserModule;
 
   get getIsFetchingSolutions() {
     return (taskId: number) => this.fetchingSolutions[taskId];
@@ -91,7 +91,7 @@ export class TaskModule extends VuexModule {
       const task: Task | undefined = R.find(R.propEq('id', taskId))(this.tasks);
       const meta: Meta = this.tasksMeta[taskId];
 
-      if (!task) {
+      if (!task || !meta.user) {
         return -1;
       }
 
@@ -182,7 +182,7 @@ export class TaskModule extends VuexModule {
     taskId,
     query = '',
     page = 0,
-    pageSize = 50,
+    pageSize = 5,
     sort = 'rating',
   }: IFetchSolutionParams) {
     this.context.commit('setIsFetchingSolutions', { taskId, value: true });
@@ -209,6 +209,13 @@ export class TaskModule extends VuexModule {
     const solutions: SolutionArray = response[0];
 
     this.context.commit('setIsFetchingSolutions', { taskId, value: false });
+
+    if (page !== 0) {
+      TaskModule.metricsService.sendEvent({
+        gaCategory: 'Виджет',
+        gaAction: 'Показать еще',
+      });
+    }
 
     return {
       [taskId]: solutions,
@@ -239,7 +246,7 @@ export class TaskModule extends VuexModule {
         (likeAccess.is_soc_auth && user.socialVerified);
 
       if (!userIsVerified) {
-        await this.userModule.requestVerification(
+        await TaskModule.userModule.requestVerification(
           likeAccess.is_phone && !user.phoneVerified,
           likeAccess.is_soc_auth && !user.socialVerified,
           task.literals.solution_num_s
@@ -288,7 +295,7 @@ export class TaskModule extends VuexModule {
       )
     );
 
-    this.metricsService.sendEvent({
+    TaskModule.metricsService.sendEvent({
       gaCategory: 'Контент',
       gaAction: userVoteCode ? 'Лайк решения' : 'Снятие лайка решения',
     });

@@ -40,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import * as R from 'ramda';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 import TaskModule from '@/modules/task/TaskModule';
@@ -75,7 +76,9 @@ export default class ListColumn extends Vue {
   get isVotedFor() {
     return (solutionId: number): boolean => {
       const meta = this.meta(this.task.id);
-      return Boolean(meta.user.solution_votes[solutionId]) || false;
+      return (
+        Boolean(R.path(['user', 'solution_votes', solutionId], meta)) || false
+      );
     };
   }
 
