@@ -1,13 +1,16 @@
 {
-  "name": "hello-world",
+  "name": "fom-book-award-widget",
+  "author": "Roman Chesnokov",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name book-widget ./src/main.ts",
+    "build": "vue-cli-service build --target lib --name bookwidget ./src/main.ts",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "install": "npm install && npm run build",
+    "postinstall": "node ./postinstall.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
