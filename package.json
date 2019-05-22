@@ -8,9 +8,7 @@
     "build": "vue-cli-service build --target lib --name bookwidget ./src/main.ts",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit",
-    "install": "npm install && npm run build",
-    "postinstall": "node ./postinstall.js"
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -43,6 +41,7 @@
     "@vue/cli-service": "^3.6.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
+    "fs-extra": "^8.0.1",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
     "style-resources-loader": "^1.2.1",

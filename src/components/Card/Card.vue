@@ -14,10 +14,12 @@
         </a>
         <div :class="$style.bottom">
           <CardLikes
+            :is-author="isUserAuthor"
             :likes="solution.metrics.positive_votes"
             :dislikes="solution.metrics.negative_votes"
             :vote="vote"
             :votesRemaining="votesRemaining"
+            :votingDisabled="votingDisabled"
             @like="handleLikeClick"
           />
           <Toggle @click="handleDetailsClick">Подробнее</Toggle>
@@ -68,8 +70,9 @@
           </span>
 
           <span :class="$style.actions">
-            <Icon name="share" />
-            <Icon name="star" />
+            <!-- @TODO Actions -->
+            <!-- <Icon name="share" /> -->
+            <!-- <Icon name="star" /> -->
           </span>
         </footer>
       </div>
@@ -83,6 +86,7 @@ import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 import CardLikes from './CardLikes.vue';
 import { Solution } from '@/modules/task/models/solution';
 import { Task } from '@/modules/task/models/task';
+import { Getter } from 'vuex-class';
 
 @Component({
   components: {
@@ -94,6 +98,9 @@ export default class Card extends Vue {
   @Prop() task!: Task;
   @Prop() vote!: boolean;
   @Prop() votesRemaining!: number;
+  @Prop() votingDisabled!: boolean;
+
+  @Getter('user/getUser') user?: any;
 
   isExpanded = false;
   isDescriptionExpanded = false;
@@ -118,6 +125,10 @@ export default class Card extends Vue {
   get isDescriptionTrimmed() {
     const content = this.content.description || this.solution.content;
     return content && content.length! > 180;
+  }
+
+  get isUserAuthor() {
+    return this.user && this.user.id === this.solution.author.id;
   }
 
   get link() {

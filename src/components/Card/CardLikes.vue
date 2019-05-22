@@ -7,14 +7,19 @@
       @mouseleave="handleBlur"
       @mouseenter="handleHover"
     >
-      <Button square plain :icon="buttonIcon"></Button>
+      <Button
+        square
+        plain
+        :disabled="buttonDisabled"
+        :icon="buttonIcon"
+      ></Button>
     </span>
     <span :class="$style.counter">{{ likes | roundup }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Inject, Prop, Vue } from 'vue-property-decorator';
 import * as utils from '@/utils';
 import { Getter } from 'vuex-class';
 import { User } from '@/modules/task/models/meta';
@@ -23,15 +28,25 @@ import { User } from '@/modules/task/models/meta';
 export default class CardLikes extends Vue {
   @Prop(Number) likes!: number;
   @Prop(Number) dislikes!: number;
+  @Prop({ default: false }) isUserAuthor!: boolean;
   @Prop({ default: false }) isDislikesShown!: boolean;
   @Prop({ default: false }) vote!: boolean;
+  @Prop({ default: false }) votingDisabled!: boolean;
   @Prop({ default: null }) votesRemaining!: number;
 
   @Getter('user/getUser') user!: User;
 
   isButtonHovered = false;
 
+  get buttonDisabled() {
+    return this.votingDisabled || this.isUserAuthor || this.votesRemaining <= 0;
+  }
+
   get buttonIcon() {
+    if (this.votingDisabled || this.isUserAuthor) {
+      return this.vote ? 'heartFilled' : 'heartDisabled';
+    }
+
     if (!this.user) {
       return this.isButtonHovered ? 'heartHover' : 'heart';
     }
@@ -46,6 +61,14 @@ export default class CardLikes extends Vue {
   }
 
   get tooltipContent() {
+    if (this.votingDisabled) {
+      return 'Голосование окончилось';
+    }
+
+    if (this.isUserAuthor) {
+      return 'Нельзя голосовать за свое решение';
+    }
+
     if (!this.user) {
       return '';
     }

@@ -9,7 +9,7 @@ import {
 import { Task, TaskResponse } from '@/modules/task/models/task';
 import { AxiosResponse } from 'axios';
 
-type Sorting = 'vote_total' | 'created' | '';
+type Sorting = 'created' | 'review_count' | 'vote_total';
 
 interface IFetchSolutionsParams {
   taskId: number;

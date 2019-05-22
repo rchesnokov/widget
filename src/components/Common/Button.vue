@@ -26,6 +26,7 @@ export default class Button extends Vue {
   @Prop(String) link!: string;
   @Prop(String) text!: string;
   @Prop(String) icon!: string;
+  @Prop({ default: false }) disabled!: boolean;
   @Prop({ default: true }) primary!: boolean;
   @Prop(Boolean) secondary!: boolean;
   @Prop(Boolean) plain!: boolean;
@@ -35,6 +36,7 @@ export default class Button extends Vue {
   get buttonClass() {
     return {
       [this.$style.root]: true,
+      [this.$style.disabled]: this.disabled,
       [this.$style.primary]: this.primary && !(this.secondary || this.plain),
       [this.$style.secondary]: this.secondary,
       [this.$style.plain]: this.plain,
@@ -100,6 +102,16 @@ export default class Button extends Vue {
     &:hover {
       background-color: $pale-grey-three;
       border-color: $light-blue-grey-three;
+    }
+  }
+
+  &.disabled {
+    background-color: $pale-grey;
+    border: 1px solid $light-grey;
+
+    &:hover {
+      background-color: $pale-grey;
+      border-color: $light-grey;
     }
   }
 

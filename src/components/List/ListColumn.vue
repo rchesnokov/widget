@@ -15,7 +15,8 @@
       :solution="item"
       :task="task"
       :vote="isVotedFor(item.id)"
-      :votesRemaining="remainingVotes(task.id)"
+      :votesRemaining="getRemainingVotes(task.id)"
+      :votingDisabled="getIsVotingDisabled(task.id)"
       @like="handleLikeClick"
     />
 
@@ -41,7 +42,7 @@
 
 <script lang="ts">
 import * as R from 'ramda';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Provide, Vue } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 import TaskModule from '@/modules/task/TaskModule';
 import Card from '@/components/Card/Card.vue';
@@ -50,7 +51,7 @@ import { Meta } from '@/modules/task/models/meta';
 import { Solution, SolutionArray } from '@/modules/task/models/solution';
 import { Task } from '@/modules/task/models/task';
 
-type Sorting = 'rating' | 'name' | 'date';
+type Sorting = 'date' | 'rating' | 'review';
 
 @Component({
   components: {
@@ -71,7 +72,10 @@ export default class ListColumn extends Vue {
   @Getter('getIsFetchingSolutions') isFetching!: (taskId: number) => boolean;
   @Getter('getSolutions') solutions!: (taskId: number) => SolutionArray;
   @Getter('getTaskMeta') meta!: (taskId: number) => Meta;
-  @Getter('getRemainingVotes') remainingVotes!: (taskId: number) => number;
+  @Getter('getIsVotingDisabled') getIsVotingDisabled!: (
+    taskId: number
+  ) => boolean;
+  @Getter('getRemainingVotes') getRemainingVotes!: (taskId: number) => number;
 
   get isVotedFor() {
     return (solutionId: number): boolean => {
@@ -125,7 +129,7 @@ export default class ListColumn extends Vue {
     });
   }
 
-  handleSortChange(id: 'rating' | 'name' | 'date') {
+  handleSortChange(id: 'date' | 'rating' | 'review') {
     this.page = 0;
     this.sort = id;
 

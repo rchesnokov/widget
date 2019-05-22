@@ -21,12 +21,12 @@ const alertServiceMock = {
 };
 
 const verificationServiceMock = {
-  // tslint:disable-next-line:no-empty
   requestVerification: (
     isNotPhoneVerified: boolean,
     isNotSNVerified: boolean,
     like: string,
     solutionLiteral: string
+    // tslint:disable-next-line:no-empty
   ) => {},
 };
 

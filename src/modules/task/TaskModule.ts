@@ -24,7 +24,7 @@ declare global {
   }
 }
 
-type Sorting = 'rating' | 'name' | 'date';
+type Sorting = 'date' | 'rating' | 'review';
 
 interface IMetaMap {
   [key: number]: Meta;
@@ -32,6 +32,10 @@ interface IMetaMap {
 
 interface ISolutionMap {
   [key: number]: SolutionArray;
+}
+
+interface ITaskMap {
+  [key: number]: Task;
 }
 
 interface IFetchingSolutionMap {
@@ -47,9 +51,9 @@ interface IFetchSolutionParams {
 }
 
 enum FetchSolutionSortMap {
-  rating = 'vote_total',
   date = 'created',
-  name = '',
+  rating = 'vote_total',
+  review = 'review_count',
 }
 
 const tasksRequested = window.__BOOK_AWARD_TASKS__ || [9303, 9304];
@@ -67,7 +71,7 @@ export class TaskModule extends VuexModule {
   fetchingSolutions: IFetchingSolutionMap = {};
   requested = tasksRequested;
   solutions: ISolutionMap = {};
-  tasks: Task[] = [];
+  tasks: ITaskMap = {};
   tasksMeta: IMetaMap = {};
 
   get getIsFetchingSolutions() {
@@ -79,16 +83,28 @@ export class TaskModule extends VuexModule {
   }
 
   get getTasks() {
-    return this.tasks;
+    return R.values(this.tasks);
+  }
+
+  get getTask() {
+    return (taskId: number) => this.tasks[taskId];
   }
 
   get getTaskMeta() {
     return (taskId: number) => this.tasksMeta[taskId];
   }
 
+  get getIsVotingDisabled() {
+    return (taskId: number) => {
+      const task = this.tasks[taskId];
+      const status = task.status;
+      return status === 'completed' || status === 'summing-up';
+    };
+  }
+
   get getRemainingVotes() {
     return (taskId: number): number => {
-      const task: Task | undefined = R.find(R.propEq('id', taskId))(this.tasks);
+      const task: Task = this.tasks[taskId];
       const meta: Meta = this.tasksMeta[taskId];
 
       if (!task || !meta.user) {
@@ -129,7 +145,7 @@ export class TaskModule extends VuexModule {
   }
 
   @Mutation
-  setTasks(tasks: Task[]) {
+  setTasks(tasks: ITaskMap) {
     this.tasks = tasks;
   }
 
@@ -165,7 +181,13 @@ export class TaskModule extends VuexModule {
 
     this.context.commit('setIsFetchingTasks', false);
 
-    return response;
+    const getIdsArray = R.pipe(
+      // @ts-ignore
+      R.pluck('id'),
+      R.map((id) => String(id))
+    );
+
+    return R.zipObj(getIdsArray(response), response);
   }
 
   @Action({ commit: 'setTasksMeta' })
@@ -187,7 +209,7 @@ export class TaskModule extends VuexModule {
   }: IFetchSolutionParams) {
     this.context.commit('setIsFetchingSolutions', { taskId, value: true });
 
-    const sorting: 'vote_total' | 'created' | '' =
+    const sorting: 'created' | 'review_count' | 'vote_total' =
       FetchSolutionSortMap[sort as keyof typeof FetchSolutionSortMap];
 
     const response = await Promise.all([

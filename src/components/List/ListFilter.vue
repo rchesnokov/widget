@@ -25,10 +25,10 @@ export default class ListFilter extends Vue {
       id: 'rating',
       label: 'По рейтингу',
     },
-    // {
-    //   id: 'name',
-    //   label: 'По алфавиту',
-    // },
+    {
+      id: 'review',
+      label: 'По количеству рецензий',
+    },
   ];
 
   @Emit('sort-change')
