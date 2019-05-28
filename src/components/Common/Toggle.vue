@@ -28,6 +28,7 @@ export default class Toggle extends Vue {
 <style lang="scss" module>
 .root {
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .text {

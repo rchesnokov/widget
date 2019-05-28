@@ -77,6 +77,7 @@ export default class App extends Vue {}
 
 .slide-down-enter,
 .slide-down-leave-to {
+  overflow: hidden;
   opacity: 0;
   max-height: 0;
 }

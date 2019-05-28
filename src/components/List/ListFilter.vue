@@ -3,7 +3,7 @@
     <Select
       :class="$style.select"
       :list="filters"
-      active="rating"
+      :active="defaultSorting"
       @select="handleSortSelect"
     />
 
@@ -12,10 +12,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Emit, Vue } from 'vue-property-decorator';
+import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
+import { Getter } from 'vuex-class';
 
 @Component
 export default class ListFilter extends Vue {
+  @Prop() defaultSorting!: string;
+
   filters = [
     {
       id: 'date',
@@ -25,10 +28,10 @@ export default class ListFilter extends Vue {
       id: 'rating',
       label: 'По рейтингу',
     },
-    {
-      id: 'review',
-      label: 'По количеству рецензий',
-    },
+    // {
+    //   id: 'review',
+    //   label: 'По количеству рецензий',
+    // },
   ];
 
   @Emit('sort-change')

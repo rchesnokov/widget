@@ -17,6 +17,13 @@ import heartDisabled from '@/assets/images/heart-disabled.svg';
 import loupe from '@/assets/images/loupe.svg';
 import paperclip from '@/assets/images/paperclip.svg';
 import share from '@/assets/images/share.svg';
+import socialFb from '@/assets/images/social-fb.svg';
+import socialGoogle from '@/assets/images/social-google.svg';
+import socialInstagram from '@/assets/images/social-instagram.svg';
+import socialMail from '@/assets/images/social-mail.svg';
+import socialOdnoklassniki from '@/assets/images/social-ok.svg';
+import socialTwitter from '@/assets/images/social-twitter.svg';
+import socialVkontakte from '@/assets/images/social-vk.svg';
 import star from '@/assets/images/star.svg';
 import starFilled from '@/assets/images/star-filled.svg';
 
@@ -30,6 +37,13 @@ enum Icons {
   loupe = 'loupe',
   paperclip = 'paperclip',
   share = 'share',
+  socialFb = 'social-fb',
+  socialGoogle = 'social-google',
+  socialInstagram = 'social-instagram',
+  socialMail = 'social-mail',
+  socialOdnoklassniki = 'social-ok',
+  socialTwitter = 'social-twitter',
+  socialVkontakte = 'social-vk',
   star = 'star',
   starFilled = 'star-filled',
 }
@@ -45,6 +59,13 @@ enum Icons {
     loupe,
     paperclip,
     share,
+    socialFb,
+    socialGoogle,
+    socialInstagram,
+    socialMail,
+    socialOdnoklassniki,
+    socialTwitter,
+    socialVkontakte,
     star,
     starFilled,
   },
@@ -59,7 +80,7 @@ export default class Icon extends Vue {
 .root {
   height: 1em;
   width: 1em;
-  font-size: 1rem;
+  font-size: 1em;
 
   svg {
     display: block;

@@ -63,15 +63,21 @@
 
         <footer :class="$style.footer">
           <span>
-            <a :href="`/user/${solution.author.id}`" :class="$style.author">
+            <a
+              v-if="!!task.solutions_view.show_author"
+              :href="`/user/${solution.author.id}`"
+              :class="$style.author"
+              target="_blank"
+            >
               <CLink>{{ solution.author.username }}</CLink>
             </a>
-            <span> • {{ solution.created | date }}</span>
+            <span v-if="!!task.solutions_view.show_author"> • </span>
+            <span>{{ solution.created | date }}</span>
           </span>
 
           <span :class="$style.actions">
             <!-- @TODO Actions -->
-            <!-- <Icon name="share" /> -->
+            <Sharing :task="task" :solution="solution" />
             <!-- <Icon name="star" /> -->
           </span>
         </footer>
@@ -84,6 +90,7 @@
 import * as R from 'ramda';
 import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 import CardLikes from './CardLikes.vue';
+import Sharing from '@/components/Sharing/Sharing.vue';
 import { Solution } from '@/modules/task/models/solution';
 import { Task } from '@/modules/task/models/task';
 import { Getter } from 'vuex-class';
@@ -91,6 +98,7 @@ import { Getter } from 'vuex-class';
 @Component({
   components: {
     CardLikes,
+    Sharing,
   },
 })
 export default class Card extends Vue {
@@ -116,6 +124,7 @@ export default class Card extends Vue {
 
     return {
       author: getFieldValue('Автор'),
+      circulation: getFieldValue('Тираж'),
       description: getFieldValue('Описание'),
       publisher: getFieldValue('Издательство'),
       title: getFieldValue('Название'),
@@ -142,11 +151,15 @@ export default class Card extends Vue {
   }
 
   get thumbnail() {
-    return R.path(['attachments', 0, 'thumbs', 560], this.solution) || '';
+    return R.path(['attachments', 0, 'url'], this.solution) || '';
   }
 
   get trimmedContent() {
-    return this.solution.content && `${this.solution.content.slice(0, 180)}...`;
+    return (
+      (this.content.description &&
+        `${this.content.description.slice(0, 180)}...`) ||
+      (this.solution.content && `${this.solution.content.slice(0, 180)}...`)
+    );
   }
 
   handleDetailsClick(event: MouseEvent) {
@@ -228,7 +241,6 @@ export default class Card extends Vue {
 }
 
 .additional {
-  overflow: hidden;
   max-height: 500px;
 
   &:global(.slide-down-enter),
@@ -249,6 +261,7 @@ export default class Card extends Vue {
   margin: 0 auto;
   font-size: 13px;
   line-height: 1.54;
+  white-space: pre-line;
 }
 
 .descriptionButtonMore {

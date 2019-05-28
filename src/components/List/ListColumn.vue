@@ -4,6 +4,7 @@
 
     <ListFilter
       :class="$style.filter"
+      :default-sorting="getDefaultSorting(task.id)"
       @search-change="handleSearchChange"
       @sort-change="handleSortChange"
     />
@@ -76,6 +77,7 @@ export default class ListColumn extends Vue {
     taskId: number
   ) => boolean;
   @Getter('getRemainingVotes') getRemainingVotes!: (taskId: number) => number;
+  @Getter('getDefaultSorting') getDefaultSorting!: (taskId: number) => string;
 
   get isVotedFor() {
     return (solutionId: number): boolean => {

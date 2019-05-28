@@ -1,5 +1,11 @@
 <template>
-  <a v-if="link" :href="link" :class="buttonClass" @click="handleClick">
+  <a
+    v-if="link"
+    :href="link"
+    :class="buttonClass"
+    target="_blank"
+    @click="handleClick"
+  >
     <span><slot></slot></span>
     <Icon
       v-if="icon"

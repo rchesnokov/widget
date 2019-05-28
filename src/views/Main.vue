@@ -27,8 +27,11 @@ export default class Main extends Vue {
       await this.$auth.createToken();
     }
 
-    this.taskModule.fetchTasks();
-    this.taskModule.fetchTasksMeta();
+    await Promise.all([
+      this.taskModule.fetchTasks(),
+      this.taskModule.fetchTasksMeta(),
+    ]);
+
     R.forEach(
       (task) => this.taskModule.fetchTaskSolutions({ taskId: task }),
       this.taskModule.requested

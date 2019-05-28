@@ -1,6 +1,12 @@
 <template>
   <div :class="$style.root">
-    <swiper :class="$style.slider" :options="swiperOptions">
+    <swiper
+      ref="Swiper"
+      :class="sliderClass"
+      :options="swiperOptions"
+      @transitionStart="onSlideChange"
+      @transitionEnd="onSlideChange"
+    >
       <swiper-slide v-for="item in tasks" :key="item.id" :class="$style.slide">
         <ListColumn :task="item" />
       </swiper-slide>
@@ -11,6 +17,7 @@
       >
         <arrow :class="$style.icon" />
       </div>
+
       <div
         :class="[$style.navbutton, $style.navbutton_next, 'button-next']"
         slot="button-next"
@@ -37,11 +44,16 @@ export default class List extends Vue {
   @Prop(Array)
   tasks!: Task[];
 
+  isOnLeftEnd: boolean = false;
+  isOnRightEnd: boolean = false;
+
   swiperOptions = {
     slidesPerView: 'auto',
     spaceBetween: 65,
     centerInsufficientSlides: true,
     watchOverflow: true,
+    watchSlidesProgress: true,
+    watchSlidesVisibility: true,
     navigation: {
       nextEl: '.button-next',
       prevEl: '.button-prev',
@@ -58,6 +70,26 @@ export default class List extends Vue {
       },
     },
   };
+
+  get swiper() {
+    //@ts-ignore
+    return this.$refs.Swiper.swiper;
+  }
+
+  get sliderClass() {
+    return {
+      [this.$style.slider]: true,
+      [this.$style.slider_left]: this.isOnLeftEnd,
+      [this.$style.slider_right]: this.isOnRightEnd,
+    };
+  }
+
+  onSlideChange() {
+    this.$nextTick(() => {
+      this.isOnLeftEnd = this.swiper.progress === 0;
+      this.isOnRightEnd = this.swiper.progress === 1;
+    });
+  }
 }
 </script>
 
@@ -80,9 +112,10 @@ export default class List extends Vue {
     height: 100%;
     width: 20%;
     pointer-events: none;
+    transition: opacity 0.2s ease-out;
 
     @media #{$desktop} {
-      width: 10%;
+      width: 20%;
     }
 
     @media #{$tablet} {
@@ -92,7 +125,12 @@ export default class List extends Vue {
 
   &:after {
     left: 0;
-    background: linear-gradient(to right, $pale-grey, rgba(244, 244, 245, 0));
+    background: linear-gradient(
+      to right,
+      $pale-grey 0,
+      rgba(244, 244, 245, 0.75) 75%,
+      rgba(244, 244, 245, 0) 100%
+    );
 
     @media #{$tablet} {
       height: 50px;
@@ -101,10 +139,27 @@ export default class List extends Vue {
 
   &:before {
     right: 0;
-    background: linear-gradient(to left, $pale-grey, rgba(244, 244, 245, 0));
+    background: linear-gradient(
+      to left,
+      $pale-grey 0,
+      rgba(244, 244, 245, 0.75) 75%,
+      rgba(244, 244, 245, 0) 100%
+    );
 
     @media #{$tablet} {
       height: 50px;
+    }
+  }
+
+  &_left {
+    &:after {
+      opacity: 0;
+    }
+  }
+
+  &_right {
+    &:before {
+      opacity: 0;
     }
   }
 }
@@ -133,12 +188,12 @@ export default class List extends Vue {
 .navbutton {
   position: absolute;
   z-index: 3;
-  top: 40px;
+  top: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 31px;
-  width: 31px;
+  height: 40px;
+  width: 40px;
   background-color: $blue;
   border-radius: 100%;
   fill: $white;
@@ -169,7 +224,7 @@ export default class List extends Vue {
 
 .icon {
   display: block;
-  height: 12px;
+  height: 16px;
   width: 12px;
 }
 </style>

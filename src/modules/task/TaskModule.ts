@@ -56,6 +56,12 @@ enum FetchSolutionSortMap {
   review = 'review_count',
 }
 
+enum FetchSolutionSortMapReverse {
+  created = 'date',
+  vote_total = 'rating',
+  review_count = 'review',
+}
+
 const tasksRequested = window.__BOOK_AWARD_TASKS__ || [9303, 9304];
 const metricsServiceMock = {
   // tslint:disable-next-line:no-empty
@@ -92,6 +98,16 @@ export class TaskModule extends VuexModule {
 
   get getTaskMeta() {
     return (taskId: number) => this.tasksMeta[taskId];
+  }
+
+  get getDefaultSorting() {
+    return (taskId: number) => {
+      const task = this.tasks[taskId];
+      const param = task.sort_by.match(/^(\w+)/g);
+      const sorting = param && param[0];
+      // @ts-ignore
+      return FetchSolutionSortMapReverse[sorting];
+    };
   }
 
   get getIsVotingDisabled() {
@@ -205,10 +221,11 @@ export class TaskModule extends VuexModule {
     query = '',
     page = 0,
     pageSize = 5,
-    sort = 'rating',
+    sort,
   }: IFetchSolutionParams) {
     this.context.commit('setIsFetchingSolutions', { taskId, value: true });
 
+    const defaultSorting = this.getDefaultSorting(taskId);
     const sorting: 'created' | 'review_count' | 'vote_total' =
       FetchSolutionSortMap[sort as keyof typeof FetchSolutionSortMap];
 
@@ -218,7 +235,7 @@ export class TaskModule extends VuexModule {
         query,
         page,
         pageSize,
-        sort: sorting,
+        sort: sorting || defaultSorting,
       }),
 
       new Promise((resolve) => {

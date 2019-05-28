@@ -8,6 +8,7 @@ import {
 } from '@/modules/task/models/solution';
 import { Task, TaskResponse } from '@/modules/task/models/task';
 import { AxiosResponse } from 'axios';
+import TaskAdapter from '@/modules/task/TaskAdapter';
 
 type Sorting = 'created' | 'review_count' | 'vote_total';
 
@@ -56,7 +57,7 @@ class TaskService {
       `api/tasks/${taskId}/solutions?${queryString}`
     );
     const data: SolutionResponse = response.data;
-    const solutions: SolutionArray = data.data;
+    const solutions: SolutionArray = TaskAdapter.solutions(data);
     solutions.count = Number(data.meta.solutions_count);
 
     return solutions;
