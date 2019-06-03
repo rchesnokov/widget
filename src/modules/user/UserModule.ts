@@ -1,5 +1,10 @@
 import { Action, getModule, Module, VuexModule } from 'vuex-module-decorators';
 import store from '@/store';
+import {
+  authServiceMock,
+  alertServiceMock,
+  verificationServiceMock,
+} from '@/modules/mocks';
 
 declare global {
   interface Window {
@@ -9,26 +14,6 @@ declare global {
     store: any;
   }
 }
-
-const authServiceMock = {
-  // tslint:disable-next-line:no-empty
-  showRegistrationPopup: () => {},
-};
-
-const alertServiceMock = {
-  // tslint:disable-next-line:no-empty
-  error: (text: string) => {},
-};
-
-const verificationServiceMock = {
-  requestVerification: (
-    isNotPhoneVerified: boolean,
-    isNotSNVerified: boolean,
-    like: string,
-    solutionLiteral: string
-    // tslint:disable-next-line:no-empty
-  ) => {},
-};
 
 @Module({ dynamic: true, name: 'user', namespaced: true, store })
 export class UserModule extends VuexModule {

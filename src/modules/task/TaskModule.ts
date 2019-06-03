@@ -16,11 +16,15 @@ import {
 } from '@/modules/task/models/solution';
 import { Task } from '@/modules/task/models/task';
 import UserModule from '@/modules/user/UserModule';
+import {
+  alertServiceMock,
+  captchaServiceMock,
+  metricsServiceMock,
+} from '@/modules/mocks';
 
 declare global {
   interface Window {
     __BOOK_AWARD_TASKS__: number[];
-    metricsService: any;
   }
 }
 
@@ -62,14 +66,12 @@ enum FetchSolutionSortMapReverse {
   review_count = 'review',
 }
 
-const tasksRequested = window.__BOOK_AWARD_TASKS__ || [9303, 9304];
-const metricsServiceMock = {
-  // tslint:disable-next-line:no-empty
-  sendEvent: (event: object) => {},
-};
+const tasksRequested = window.__BOOK_AWARD_TASKS__;
 
 @Module({ dynamic: true, name: 'task', store })
 export class TaskModule extends VuexModule {
+  static alertService = window.alertsActions || alertServiceMock;
+  static captchaService = window.captchaService || captchaServiceMock;
   static metricsService = window.metricsService || metricsServiceMock;
   static userModule = UserModule;
 
@@ -305,13 +307,41 @@ export class TaskModule extends VuexModule {
     const userVoteCode =
       userVote !== undefined ? Number(!Boolean(userVote)) : 1;
 
+    const projectName = window.store.value((state: any) => state.route.params)
+      .projectName;
+    const projectObject = window.store.value(
+      (state: any) => state.projectsLookup
+    )[projectName].project;
+    const projectHasRecaptcha = projectObject && projectObject.hasRecaptcha;
+    const recaptchaKey = window.store.value((state: any) => state.settings)
+      .invisibleRecaptchaPublicKey;
+    const isCaptchaActive =
+      'grecaptcha' in window && recaptchaKey && projectHasRecaptcha;
+    let captchaToken;
+
+    if (isCaptchaActive) {
+      TaskModule.alertService.info('Ваш голос обрабатывается');
+
+      try {
+        captchaToken = await TaskModule.captchaService.execute(recaptchaKey);
+      } catch (error) {
+        // tslint:disable-next-line:no-console
+        console.log('Vote Solution Error >>> ', error);
+      }
+    }
+
     const response: Metrics | null = await TaskService.voteForSolution(
       solution.id,
-      userVoteCode
+      userVoteCode,
+      captchaToken
     );
 
     if (response === null) {
       return;
+    }
+
+    if (captchaToken) {
+      TaskModule.alertService.success('Ваш голос принят. Спасибо за участие!');
     }
 
     const updatedSolutions: SolutionArray = [...this.solutions[task.id]];

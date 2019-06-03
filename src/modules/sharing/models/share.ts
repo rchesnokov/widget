@@ -3,7 +3,6 @@ export enum SocialsType {
   VK = 'vkontakte',
   OK = 'odnoklassniki',
   TW = 'twitter',
-  GP = 'google',
   EMAIL = 'email',
 }
 

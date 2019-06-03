@@ -63,10 +63,18 @@ class TaskService {
     return solutions;
   }
 
-  static async voteForSolution(solutionId: number, vote: number) {
+  static async voteForSolution(
+    solutionId: number,
+    vote: number,
+    captchaToken?: string
+  ) {
     const data = new FormData();
     data.set('value', String(vote));
     data.set('Csrf-Token', new Cookies().get('Csrf-Token'));
+
+    if (captchaToken) {
+      data.set('g-recaptcha-token', captchaToken);
+    }
 
     const response = await api.request({
       url: `/api/solutions/${solutionId}/vote`,
