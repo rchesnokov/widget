@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as utils from '@/utils';
 import { Getter } from 'vuex-class';
 import { User } from '@/modules/task/models/meta';
@@ -39,7 +39,11 @@ export default class CardLikes extends Vue {
   isButtonHovered = false;
 
   get buttonDisabled() {
-    return this.votingDisabled || this.isUserAuthor || this.votesRemaining <= 0;
+    return (
+      this.votingDisabled ||
+      this.isUserAuthor ||
+      (this.votesRemaining <= 0 && this.user)
+    );
   }
 
   get buttonIcon() {
@@ -89,7 +93,9 @@ export default class CardLikes extends Vue {
       many: 'голосов',
     });
 
-    return this.votesRemaining < 0
+    return this.votesRemaining === Infinity
+      ? 'Отдать голос'
+      : this.votesRemaining < 0
       ? 'Голосование недоступно'
       : this.votesRemaining === 0
       ? 'У вас не осталось голосов'
@@ -97,6 +103,10 @@ export default class CardLikes extends Vue {
   }
 
   handleClick() {
+    if (this.buttonDisabled) {
+      return;
+    }
+
     this.$emit('like');
   }
 
@@ -125,6 +135,6 @@ export default class CardLikes extends Vue {
   margin-left: 7px;
   font-size: 13px;
   line-height: 1.54;
-  color: $blue;
+  color: $gold;
 }
 </style>

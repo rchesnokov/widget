@@ -188,24 +188,26 @@ export default class List extends Vue {
 .navbutton {
   position: absolute;
   z-index: 3;
-  top: 44px;
+  top: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
-  width: 40px;
-  background-color: $blue;
+  height: 48px;
+  width: 48px;
+  background-color: $gold;
   border-radius: 100%;
   fill: $white;
   transition: background-color 0.2s ease-out, opacity 0.3s ease-out;
   cursor: pointer;
 
   @media #{$tablet} {
-    top: 26px;
+    top: 28px;
+    height: 32px;
+    width: 32px;
   }
 
   &:hover {
-    background-color: $dark-sky-blue;
+    background-color: $light-gold;
   }
 
   &_prev {

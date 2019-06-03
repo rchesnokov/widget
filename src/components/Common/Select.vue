@@ -94,13 +94,13 @@ export default class Select extends Vue {
   cursor: pointer;
 
   &:hover {
-    background-color: $light-blue-grey;
-    color: $blue;
+    background-color: $light-beige-two;
+    color: $gold;
   }
 
   &_active {
-    background-color: $light-blue-grey;
-    color: $blue;
+    background-color: $light-beige-two;
+    color: $gold;
   }
 }
 
@@ -113,7 +113,7 @@ export default class Select extends Vue {
   justify-content: center;
   height: rem(42px);
   width: rem(42px);
-  background-color: $light-blue-grey;
+  background-color: $light-beige-two;
   background-image: url('');
   border-radius: 0 3px 3px 0;
 }
@@ -140,7 +140,7 @@ export default class Select extends Vue {
   cursor: pointer;
 
   &:hover {
-    color: $blue;
+    color: $gold;
   }
 
   &:after {

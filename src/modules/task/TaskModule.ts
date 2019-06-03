@@ -128,8 +128,8 @@ export class TaskModule extends VuexModule {
       }
 
       const votesBudget = Number(task.vote_budget);
-      if (!votesBudget) {
-        return -1;
+      if (votesBudget === 0) {
+        return Infinity;
       }
 
       const userVotes = meta.user.solution_votes;
@@ -285,12 +285,15 @@ export class TaskModule extends VuexModule {
         (likeAccess.is_soc_auth && user.socialVerified);
 
       if (!userIsVerified) {
-        await TaskModule.userModule.requestVerification(
-          likeAccess.is_phone && !user.phoneVerified,
-          likeAccess.is_soc_auth && !user.socialVerified,
-          task.literals.solution_num_s
-        );
-        this.likeSolution({ task, solution });
+        try {
+          await TaskModule.userModule.requestVerification({
+            isNotPhoneVerified: likeAccess.is_phone && !user.phoneVerified,
+            isNotSNVerified: likeAccess.is_soc_auth && !user.socialVerified,
+            solutionLiteral: task.literals.solution_num_s,
+          });
+          this.likeSolution({ task, solution });
+        } catch (e) {}
+
         return;
       }
     }

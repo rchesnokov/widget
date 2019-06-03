@@ -1,10 +1,10 @@
 export enum SocialsType {
-  FB,
-  VK,
-  OK,
-  TW,
-  GP,
-  EMAIL,
+  FB = 'facebook',
+  VK = 'vkontakte',
+  OK = 'odnoklassniki',
+  TW = 'twitter',
+  GP = 'google',
+  EMAIL = 'email',
 }
 
 export interface ShareConfig {

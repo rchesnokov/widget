@@ -1,14 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20">
-    <defs>
-        <path id="a" d="M14 18.475a5 5 0 1 1 1 0V22.5a.5.5 0 1 1-1 0v-4-.025zm.5-.975a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
-    </defs>
     <g transform="rotate(-45 6.464 17.828)">
-        <mask id="b">
-            <use xlink:href="#a"/>
-        </mask>
-        <use xlink:href="#a"/>
-        <g mask="url(#b)">
-            <path d="M14.5.65l14.142 14.143L14.5 28.935.358 14.793z"/>
-        </g>
+        <path d="M14 18.475a5 5 0 1 1 1 0V22.5a.5.5 0 1 1-1 0v-4-.025zm.5-.975a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
     </g>
 </svg>

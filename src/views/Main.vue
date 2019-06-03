@@ -23,9 +23,7 @@ export default class Main extends Vue {
   @Getter('getTasks') tasks!: Task[];
 
   async created() {
-    if (!this.$auth.getToken()) {
-      await this.$auth.createToken();
-    }
+    await this.$auth.createToken();
 
     await Promise.all([
       this.taskModule.fetchTasks(),

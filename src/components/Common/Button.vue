@@ -80,10 +80,10 @@ export default class Button extends Vue {
   &.primary {
     color: $white;
     fill: $white;
-    background-color: $blue;
+    background-color: $gold;
 
     &:hover {
-      background-color: $dark-sky-blue;
+      background-color: $light-gold;
     }
   }
 
@@ -94,20 +94,20 @@ export default class Button extends Vue {
     box-shadow: 0 18px 18px 0 rgba(28, 32, 38, 0.05);
 
     &:hover {
-      color: $blue;
-      fill: $blue;
+      color: $gold;
+      fill: $gold;
     }
   }
 
   &.plain {
-    color: $blue;
-    fill: $blue;
-    background-color: $pale-grey-two;
-    border: 1px solid $light-blue-grey;
+    color: $gold;
+    fill: $gold;
+    background-color: $light-beige-three;
+    border: 1px solid $light-beige;
 
     &:hover {
-      background-color: $pale-grey-three;
-      border-color: $light-blue-grey-three;
+      background-color: $light-beige-two;
+      border-color: $beige;
     }
   }
 
@@ -152,7 +152,7 @@ export default class Button extends Vue {
   top: 50%;
   right: rem(14px);
   display: block;
-  font-size: rem(20px);
+  font-size: rem(16px);
   fill: $warm-grey;
   transform: translate(0, -50%);
 

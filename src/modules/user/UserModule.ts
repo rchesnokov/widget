@@ -44,11 +44,15 @@ export class UserModule extends VuexModule {
   }
 
   @Action
-  requestVerification(
-    isNotPhoneVerified: boolean,
-    isNotSNVerified: boolean,
-    solutionLiteral: string
-  ) {
+  requestVerification({
+    isNotPhoneVerified,
+    isNotSNVerified,
+    solutionLiteral,
+  }: {
+    isNotPhoneVerified: boolean;
+    isNotSNVerified: boolean;
+    solutionLiteral: string;
+  }) {
     return UserModule.verificationService.requestVerification(
       isNotPhoneVerified,
       isNotSNVerified,

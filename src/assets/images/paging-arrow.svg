@@ -10,7 +10,7 @@
     <g fill="none" fill-rule="evenodd">
         <g transform="translate(17)">
             <use fill="#000" filter="url(#a)" xlink:href="#b"/>
-            <use fill="#4491CE" xlink:href="#b"/>
+            <use fill="#b0946c" xlink:href="#b"/>
         </g>
         <path fill="#FFF" d="M35.45 15.5l-5.657-5.657.707-.707 5.657 5.657.707.707-6.364 6.364-.707-.707L35.45 15.5z"/>
     </g>

@@ -10,11 +10,14 @@
       <div :class="$style.content">
         <a :class="$style.top" :href="link">
           <div :class="$style.author">{{ content.author }}</div>
-          <div :class="$style.name">{{ content.title || solution.title }}</div>
+          <div
+            :class="$style.name"
+            v-html="content.title || solution.title"
+          ></div>
         </a>
         <div :class="$style.bottom">
           <CardLikes
-            :is-author="isUserAuthor"
+            :is-user-author="isUserAuthor"
             :likes="solution.metrics.positive_votes"
             :dislikes="solution.metrics.negative_votes"
             :vote="vote"
@@ -77,7 +80,7 @@
 
           <span :class="$style.actions">
             <!-- @TODO Actions -->
-            <Sharing :task="task" :solution="solution" />
+            <Sharing :task="task" :solution="solution" :content="content" />
             <!-- <Icon name="star" /> -->
           </span>
         </footer>
@@ -137,7 +140,9 @@ export default class Card extends Vue {
   }
 
   get isUserAuthor() {
-    return this.user && this.user.id === this.solution.author.id;
+    return (
+      this.user && Number(this.user.id) === Number(this.solution.author.id)
+    );
   }
 
   get link() {
@@ -229,7 +234,7 @@ export default class Card extends Vue {
   transition: color 0.2s ease-out;
 
   .top:hover & {
-    color: $blue;
+    color: $gold;
   }
 }
 
@@ -241,7 +246,8 @@ export default class Card extends Vue {
 }
 
 .additional {
-  max-height: 500px;
+  overflow: hidden;
+  max-height: 1000px;
 
   &:global(.slide-down-enter),
   &:global(.slide-down-leave-to) {
@@ -299,7 +305,7 @@ export default class Card extends Vue {
     cursor: pointer;
 
     &:hover {
-      fill: $blue;
+      fill: $gold;
     }
 
     &:not(:last-child) {

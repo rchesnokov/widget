@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import * as R from 'ramda';
-import { Component, Prop, Provide, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 import TaskModule from '@/modules/task/TaskModule';
 import Card from '@/components/Card/Card.vue';
@@ -66,7 +66,7 @@ export default class ListColumn extends Vue {
 
   query = '';
   page = 0;
-  sort: Sorting = 'rating';
+  sort: Sorting = 'date';
 
   taskModule = TaskModule;
 
@@ -77,7 +77,7 @@ export default class ListColumn extends Vue {
     taskId: number
   ) => boolean;
   @Getter('getRemainingVotes') getRemainingVotes!: (taskId: number) => number;
-  @Getter('getDefaultSorting') getDefaultSorting!: (taskId: number) => string;
+  @Getter('getDefaultSorting') getDefaultSorting!: (taskId: number) => Sorting;
 
   get isVotedFor() {
     return (solutionId: number): boolean => {
@@ -142,17 +142,23 @@ export default class ListColumn extends Vue {
       sort: id,
     });
   }
+
+  created() {
+    this.sort = this.getDefaultSorting(this.task.id);
+  }
 }
 </script>
 
 <style module lang="scss">
 .root {
+  width: 432px;
   max-width: 432px;
   min-height: 1100px;
   padding-bottom: 20px;
 
   @media #{$tablet} {
     width: 100%;
+    max-width: none;
     margin: 0 auto;
   }
 }

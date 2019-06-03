@@ -24,7 +24,7 @@ export class SharingModule extends VuexModule {
   static sharingUtils = window.SharingUtils || sharingUtilsMock;
 
   @Action
-  share(config: ShareConfig, type: SocialsType) {
+  share({ config, type }: { config: ShareConfig; type: SocialsType }) {
     SharingModule.sharingUtils.shareByType(config, type);
   }
 }

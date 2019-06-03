@@ -18,12 +18,12 @@ export default class Link extends Vue {
 
 <style lang="scss" module>
 .root {
-  color: $blue;
+  color: $gold;
   transition: color 0.3s ease-out;
   cursor: pointer;
 
   &:hover {
-    color: $dark-sky-blue;
+    color: $light-gold;
   }
 }
 </style>

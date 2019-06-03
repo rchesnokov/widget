@@ -83,7 +83,7 @@ export default class Search extends Vue {
   cursor: pointer;
 
   &:hover {
-    fill: $blue;
+    fill: $gold;
   }
 }
 

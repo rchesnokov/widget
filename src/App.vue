@@ -41,7 +41,7 @@ export default class App extends Vue {}
     font-size: rem(13px);
     line-height: 1.38;
     border-radius: 5px;
-    background-color: $blue;
+    background-color: $gold;
     color: $white;
   }
 
@@ -53,7 +53,7 @@ export default class App extends Vue {}
     height: 0;
     border-style: solid;
     border-width: 4px 4px 0 4px;
-    border-color: $blue transparent transparent transparent;
+    border-color: $gold transparent transparent transparent;
     transform: rotateX(-50%);
   }
 }

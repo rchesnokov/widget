@@ -5,7 +5,7 @@
     </div>
 
     <transition name="fade">
-      <div v-if="isOpened" :class="$style.list">
+      <div v-show="isOpened" :class="$style.list">
         <div :class="$style.icons">
           <div :class="$style.button" @click="share(socialsType.FB)">
             <Icon name="social-fb" />
@@ -18,9 +18,6 @@
           </div>
           <div :class="$style.button" @click="share(socialsType.TW)">
             <Icon name="social-twitter" />
-          </div>
-          <div :class="$style.button" @click="share(socialsType.GP)">
-            <Icon name="social-google" />
           </div>
           <div :class="$style.button" @click="share(socialsType.EMAIL)">
             <Icon name="social-mail" />
@@ -41,14 +38,24 @@
 </template>
 
 <script lang="ts">
+import * as R from 'ramda';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Solution } from '@/modules/task/models/solution';
 import { Task } from '@/modules/task/models/task';
 import SharingModule from '@/modules/sharing/SharingModule';
 import { SocialsType } from '@/modules/sharing/models/share';
 
+interface Content {
+  author: string;
+  circulation: string;
+  description: string;
+  publisher: string;
+  title: string;
+}
+
 @Component
 export default class Sharing extends Vue {
+  @Prop() content!: Content;
   @Prop() solution!: Solution;
   @Prop() task!: Task;
 
@@ -58,21 +65,16 @@ export default class Sharing extends Vue {
   get config() {
     return {
       url: this.url,
-      image: this.task.image,
-      title: this.task.title,
-      description: `Участвуйте в задании ${this.task.title} проекта ${
-        this.task.project.title
-      } на платформе КраудСпейс`,
+      image: R.pathOr('', [0, 'url'], this.solution.attachments),
+      title: this.content.title,
+      description: 'Книга номинирована на литературную премию "Здравомыслие"',
     };
   }
 
   get url() {
-    return (
-      window.location.origin +
-      `/project/${this.task.project.url}/task/${this.task.id}/solution/${
-        this.solution.id
-      }`
-    );
+    return `${this.task.project.url}/task/${this.task.id}/solution/${
+      this.solution.id
+    }`;
   }
 
   open() {
@@ -84,7 +86,7 @@ export default class Sharing extends Vue {
   }
 
   share(type: SocialsType) {
-    SharingModule.share(this.config, type);
+    SharingModule.share({ config: this.config, type });
   }
 
   selectLink(event: Event) {
@@ -107,7 +109,7 @@ export default class Sharing extends Vue {
   transition: fill 0.2s ease-out;
 
   &:hover {
-    fill: $blue;
+    fill: $gold;
   }
 }
 
@@ -148,7 +150,7 @@ export default class Sharing extends Vue {
   fill: $warm-grey;
 
   &:hover {
-    fill: $blue;
+    fill: $gold;
   }
 }
 
