@@ -19,12 +19,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Emit, Vue } from 'vue-property-decorator';
+import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 import _debounce from 'lodash/debounce';
 
 @Component
 export default class Search extends Vue {
-  isActive = false;
+  @Prop({ default: false }) isOpen!: Boolean;
+
+  isActive = this.isOpen;
   query = '';
 
   get buttonIcon() {

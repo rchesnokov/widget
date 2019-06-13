@@ -54,6 +54,7 @@ export default class List extends Vue {
     watchOverflow: true,
     watchSlidesProgress: true,
     watchSlidesVisibility: true,
+    simulateTouch: false,
     navigation: {
       nextEl: '.button-next',
       prevEl: '.button-prev',

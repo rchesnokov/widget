@@ -1,19 +1,22 @@
 <template>
   <div :class="$style.root">
-    <Select
-      :class="$style.select"
-      :list="filters"
-      :active="defaultSorting"
-      @select="handleSortSelect"
-    />
+    <!--<Select-->
+    <!--  :class="$style.select"-->
+    <!--  :list="filters"-->
+    <!--  :active="defaultSorting"-->
+    <!--  @select="handleSortSelect"-->
+    <!--/>-->
 
-    <Search :class="$style.search" @change="handleSearchChange" />
+    <Search
+      :class="$style.search"
+      :is-open="true"
+      @change="handleSearchChange"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
 
 @Component
 export default class ListFilter extends Vue {
@@ -50,6 +53,7 @@ export default class ListFilter extends Vue {
 .root {
   position: relative;
   display: flex;
+  justify-content: flex-end;
 }
 
 .select {

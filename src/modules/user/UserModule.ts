@@ -1,4 +1,10 @@
-import { Action, getModule, Module, VuexModule } from 'vuex-module-decorators';
+import {
+  Action,
+  getModule,
+  Module,
+  Mutation,
+  VuexModule,
+} from 'vuex-module-decorators';
 import store from '@/store';
 import {
   authServiceMock,
@@ -28,6 +34,16 @@ export class UserModule extends VuexModule {
     return this.user;
   }
 
+  @Mutation
+  setUser(user: any) {
+    this.user = user;
+  }
+
+  @Action({ commit: 'setUser' })
+  renewUserData() {
+    return window.store && window.store.getState().user;
+  }
+
   @Action
   requestVerification({
     isNotPhoneVerified,
@@ -38,12 +54,16 @@ export class UserModule extends VuexModule {
     isNotSNVerified: boolean;
     solutionLiteral: string;
   }) {
-    return UserModule.verificationService.requestVerification(
-      isNotPhoneVerified,
-      isNotSNVerified,
-      'like',
-      solutionLiteral
-    );
+    return UserModule.verificationService
+      .requestVerification(
+        isNotPhoneVerified,
+        isNotSNVerified,
+        'like',
+        solutionLiteral
+      )
+      .then(() => {
+        this.renewUserData();
+      });
   }
 
   @Action

@@ -293,6 +293,7 @@ export class TaskModule extends VuexModule {
             isNotSNVerified: likeAccess.is_soc_auth && !user.socialVerified,
             solutionLiteral: task.literals.solution_num_s,
           });
+
           this.likeSolution({ task, solution });
         } catch (e) {}
 
