@@ -14,7 +14,7 @@
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "dayjs": "^1.8.14",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "ramda": "^0.26.1",
     "sass-rem": "^2.0.1",
     "universal-cookie": "^4.0.0",
